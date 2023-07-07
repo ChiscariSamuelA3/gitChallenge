@@ -1,6 +1,7 @@
 package com.example.gitchallenge.api.endpoints
 
 import com.example.gitchallenge.api.ApiResponse
+import com.example.gitchallenge.models.Readme
 import com.example.gitchallenge.models.Repo
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -17,4 +18,10 @@ interface ReposApi {
         @Path("owner") owner: String,
         @Path("repo") repo: String
     ): Repo
+
+    @GET("repos/{owner}/{repo}/readme")
+    suspend fun getReadme(
+        @Path("owner") owner: String,
+        @Path("repo") repo: String
+    ): Readme
 }

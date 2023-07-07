@@ -5,6 +5,7 @@ import com.example.gitchallenge.api.BaseApiCall
 import com.example.gitchallenge.api.error.ApiException
 import com.example.gitchallenge.api.error.NetworkException
 import com.example.gitchallenge.api.utils.CallResult
+import com.example.gitchallenge.models.Readme
 import com.example.gitchallenge.models.Repo
 
 class ReposService : BaseApiCall() {
@@ -43,6 +44,21 @@ class ReposService : BaseApiCall() {
 
     suspend fun getRepoDetails(ownerName: String, repoName: String): Repo {
         when (val response = safeApiCall { api.getRepo(ownerName, repoName) }) {
+            is CallResult.Success -> {
+                return response.value
+            }
+            is CallResult.Failure -> {
+                if (response.networkError) {
+                    throw NetworkException("NETWORK Error")
+                } else {
+                    throw ApiException(response.errorBody.toString())
+                }
+            }
+        }
+    }
+
+    suspend fun getReadme(ownerName: String, repoName: String): Readme {
+        when (val response = safeApiCall { api.getReadme(ownerName, repoName) }) {
             is CallResult.Success -> {
                 return response.value
             }

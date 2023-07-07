@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.gitchallenge.models.Readme
 import com.example.gitchallenge.models.Repo
 import com.example.gitchallenge.services.ReposService
 import kotlinx.coroutines.launch
@@ -13,15 +14,28 @@ class RepoDetailsViewModel(context: Context) : ViewModel() {
     private val reposService: ReposService = ReposService.getInstance()
 
     private val errorLiveData: MutableLiveData<String?> = MutableLiveData(null)
-    private val repoDetails: MutableLiveData<RepoDetailsItemViewModel> = MutableLiveData(null)
+    private val repoDetails: MutableLiveData<RepoDetailsItemViewModel?> = MutableLiveData(null)
+    private val readmeDetails: MutableLiveData<Readme?> = MutableLiveData(null)
 
     fun getErrorLiveData() = errorLiveData
     fun getRepoDetails() = repoDetails
+    fun getReadmeDetails() = readmeDetails
 
     fun loadRepoDetails(owner: String, repoName: String) = viewModelScope.launch {
         try {
+            repoDetails.postValue(null)
             val repo = reposService.getRepoDetails(owner, repoName)
             repoDetails.postValue(RepoDetailsItemViewModel(repo))
+        } catch (e: Exception) {
+            errorLiveData.postValue(e.message)
+        }
+    }
+
+    fun loadReadme(owner: String, repoName: String) = viewModelScope.launch {
+        try {
+            readmeDetails.postValue(null)
+            val readme = reposService.getReadme(owner, repoName)
+            readmeDetails.postValue(readme)
         } catch (e: Exception) {
             errorLiveData.postValue(e.message)
         }
