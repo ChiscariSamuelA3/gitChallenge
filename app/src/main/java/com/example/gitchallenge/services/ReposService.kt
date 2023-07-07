@@ -8,7 +8,7 @@ import com.example.gitchallenge.api.error.NetworkException
 import com.example.gitchallenge.api.utils.CallResult
 import com.example.gitchallenge.models.Repo
 
-class ReposService(private val context: Context) : BaseApiCall() {
+class ReposService(context: Context) : BaseApiCall() {
     companion object {
         private var instance: ReposService? = null
 
@@ -21,10 +21,10 @@ class ReposService(private val context: Context) : BaseApiCall() {
         }
     }
 
-    private var api = ApiModule(context).reposApi
+    private var api = ApiModule().reposApi
 
-    suspend fun getRepos(): List<Repo> {
-        when (val response = safeApiCall { api.getRepos() }) {
+    suspend fun getRepos(page: Int): List<Repo> {
+        when (val response = safeApiCall { api.getRepos(page) }) {
             is CallResult.Success -> {
                 if (response.value.items != null) {
                     return response.value.items

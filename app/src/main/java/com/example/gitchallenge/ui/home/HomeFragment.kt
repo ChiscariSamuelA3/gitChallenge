@@ -10,18 +10,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.example.gitchallenge.R
 import com.example.gitchallenge.databinding.FragmentHomeBinding
+import kotlinx.coroutines.flow.observeOn
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
 
     private val viewModel: HomeViewModel by activityViewModels {
         HomeViewModelFactory(requireContext())
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        viewModel.loadRepos()
     }
 
     override fun onCreateView(
@@ -44,12 +39,11 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = HomeAdapter()
-        adapter.setHasStableIds(true)
         binding.rvRepos.adapter = adapter
 
         viewModel.getRepos().observe(viewLifecycleOwner) { repos ->
             if (repos != null) {
-                adapter.setRepos(repos)
+                adapter.submitData(lifecycle, repos)
             }
         }
 

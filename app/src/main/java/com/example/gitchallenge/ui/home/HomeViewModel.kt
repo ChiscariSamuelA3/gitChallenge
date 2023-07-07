@@ -1,38 +1,25 @@
 package com.example.gitchallenge.ui.home
 
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.example.gitchallenge.api.error.ApiException
+import androidx.lifecycle.*
+import androidx.paging.*
 import com.example.gitchallenge.models.Repo
 import com.example.gitchallenge.services.ReposService
-import kotlinx.coroutines.launch
 
 class HomeViewModel(context: Context) : ViewModel() {
     private val reposService: ReposService = ReposService.getInstance(context)
 
     private val errorLiveData: MutableLiveData<String?> = MutableLiveData(null)
-    private val repos: MutableLiveData<List<HomeItemViewModel>?> = MutableLiveData(null)
+    private val repos: LiveData<PagingData<HomeItemViewModel>> = Pager(PagingConfig(pageSize = 30)) {
+        ReposPagingSource(reposService)
+    }.liveData.cachedIn(viewModelScope)
 
     fun getErrorLiveData() = errorLiveData
     fun getRepos() = repos
-
-    fun loadRepos() = viewModelScope.launch {
-        try {
-            val res = reposService.getRepos().map { repo ->
-                HomeItemViewModel(repo)
-            }
-
-            repos.postValue(res)
-        } catch (e: ApiException) {
-            errorLiveData.postValue(e.message)
-        }
-    }
 }
 
 data class HomeItemViewModel(val repo: Repo) {
+    val id = repo.id
     val fullName = repo.fullName
     val name = repo.name
     val description = repo.description

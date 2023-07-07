@@ -6,6 +6,10 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
 }
 
+def apikeyPropertiesFile = rootProject.file("apikey.properties")
+def apikeyProperties = new Properties()
+apikeyProperties.load(new FileInputStream(apikeyPropertiesFile))
+
 android {
     compileSdk 32
 
@@ -16,8 +20,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        buildConfigField 'String', 'API_HOST', '"https://api.github.com/search/repositories?q=topic:android&sort=stars&order=desc/"'
-        buildConfigField 'String', 'TOKEN', '"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"'
+        buildConfigField 'String', 'API_HOST', apikeyProperties['API_HOST']
+        buildConfigField 'String', 'TOKEN', apikeyProperties['TOKEN']
     }
 
     buildTypes {

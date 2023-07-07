@@ -3,43 +3,30 @@ package com.example.gitchallenge.ui.home
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gitchallenge.databinding.ItemRepoBinding
 import com.example.gitchallenge.util.safeNavigate
 import com.squareup.picasso.Picasso
 
-class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
-    private var repos: List<HomeItemViewModel> = ArrayList()
+class HomeAdapter : PagingDataAdapter<HomeItemViewModel, HomeAdapter.HomeViewHolder>(REPO_CALLBACK) {
     private lateinit var binding: ItemRepoBinding
-
-    fun setRepos(repos: List<HomeItemViewModel>) {
-        this.repos = repos
-
-        // refresh recycler view for new data
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         binding = ItemRepoBinding.inflate(inflater, parent, false)
-        return HomeViewHolder()
+        return HomeViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-        holder.bindRepo(repos[position])
+        val repoItem = getItem(position)
+        if (repoItem != null) {
+            holder.bindRepo(repoItem)
+        }
     }
 
-    override fun getItemCount(): Int = repos.size
-
-    override fun getItemId(position: Int): Long {
-        return position.toLong()
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return position
-    }
-
-    inner class HomeViewHolder() : RecyclerView.ViewHolder(binding.root) {
+    inner class HomeViewHolder(private val binding: ItemRepoBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bindRepo(repo: HomeItemViewModel) {
             binding.apply {
                 tvFullName.text = repo.fullName
@@ -53,6 +40,23 @@ class HomeAdapter() : RecyclerView.Adapter<HomeAdapter.HomeViewHolder>() {
                     it.findNavController().safeNavigate(action)
                 }
             }
+        }
+    }
+
+    companion object {
+        // it calculates the changes in the list and updates only necessary items
+        private val REPO_CALLBACK = object : DiffUtil.ItemCallback<HomeItemViewModel>() {
+            override fun areItemsTheSame(
+                oldItem: HomeItemViewModel,
+                newItem: HomeItemViewModel
+            ): Boolean =
+                oldItem.id == newItem.id
+
+            override fun areContentsTheSame(
+                oldItem: HomeItemViewModel,
+                newItem: HomeItemViewModel
+            ): Boolean =
+                oldItem == newItem
         }
     }
 }

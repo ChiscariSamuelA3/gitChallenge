@@ -1,6 +1,5 @@
 package com.example.gitchallenge.api
 
-import android.content.Context
 import com.example.gitchallenge.BuildConfig
 import com.example.gitchallenge.api.endpoints.ReposApi
 import okhttp3.Interceptor
@@ -9,7 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class ApiModule(context: Context) {
+class ApiModule {
     private val client: OkHttpClient
         get() = OkHttpClient.Builder().also { client ->
             client.addInterceptor(Interceptor { chain ->
