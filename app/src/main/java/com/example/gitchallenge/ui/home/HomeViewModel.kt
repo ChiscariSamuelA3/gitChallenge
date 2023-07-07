@@ -9,13 +9,17 @@ import com.example.gitchallenge.services.ReposService
 class HomeViewModel(context: Context) : ViewModel() {
     private val reposService: ReposService = ReposService.getInstance()
 
+    private val isLoading = MutableLiveData<Boolean>()
+
     private val errorLiveData: MutableLiveData<String?> = MutableLiveData(null)
-    private val repos: LiveData<PagingData<HomeItemViewModel>> = Pager(PagingConfig(pageSize = 30)) {
-        ReposPagingSource(reposService)
-    }.liveData.cachedIn(viewModelScope)
+    private val repos: LiveData<PagingData<HomeItemViewModel>> =
+        Pager(PagingConfig(pageSize = 30)) {
+            ReposPagingSource(reposService, isLoading)
+        }.liveData.cachedIn(viewModelScope)
 
     fun getErrorLiveData() = errorLiveData
     fun getRepos() = repos
+    fun getIsLoading() = isLoading
 }
 
 data class HomeItemViewModel(val repo: Repo) {

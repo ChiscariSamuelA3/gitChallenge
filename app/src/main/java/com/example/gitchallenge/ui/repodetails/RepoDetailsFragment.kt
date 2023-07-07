@@ -1,6 +1,5 @@
 package com.example.gitchallenge.ui.repodetails
 
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
@@ -15,8 +14,6 @@ import com.example.gitchallenge.databinding.FragmentRepoDetailsBinding
 import com.squareup.picasso.Picasso
 import io.noties.markwon.Markwon
 import io.noties.markwon.image.ImagesPlugin
-import okhttp3.OkHttpClient
-
 
 class RepoDetailsFragment : Fragment() {
     private lateinit var binding: FragmentRepoDetailsBinding
@@ -74,6 +71,16 @@ class RepoDetailsFragment : Fragment() {
                     .build()
 
                 markwon.setMarkdown(binding.tvReadmeContent, decodedReadme)
+            }
+        }
+
+        viewModel.getIsLoading().observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.llRepoDetails.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+            } else {
+                binding.llRepoDetails.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
             }
         }
 

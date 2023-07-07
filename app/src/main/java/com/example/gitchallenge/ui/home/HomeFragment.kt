@@ -46,6 +46,15 @@ class HomeFragment : Fragment() {
             }
         }
 
+        viewModel.getIsLoading().observe(viewLifecycleOwner) { isLoading ->
+            if(isLoading) {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            else {
+                binding.progressBar.visibility = View.GONE
+            }
+        }
+
         viewModel.getErrorLiveData().observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()

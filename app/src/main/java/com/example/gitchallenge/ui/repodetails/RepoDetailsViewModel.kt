@@ -17,27 +17,35 @@ class RepoDetailsViewModel(context: Context) : ViewModel() {
     private val repoDetails: MutableLiveData<RepoDetailsItemViewModel?> = MutableLiveData(null)
     private val readmeDetails: MutableLiveData<Readme?> = MutableLiveData(null)
 
+    private val isLoading = MutableLiveData<Boolean>()
+
     fun getErrorLiveData() = errorLiveData
     fun getRepoDetails() = repoDetails
     fun getReadmeDetails() = readmeDetails
+    fun getIsLoading() = isLoading
 
     fun loadRepoDetails(owner: String, repoName: String) = viewModelScope.launch {
+        isLoading.postValue(true)
         try {
-            repoDetails.postValue(null)
             val repo = reposService.getRepoDetails(owner, repoName)
             repoDetails.postValue(RepoDetailsItemViewModel(repo))
         } catch (e: Exception) {
             errorLiveData.postValue(e.message)
+        } finally {
+            isLoading.postValue(false)
         }
     }
 
     fun loadReadme(owner: String, repoName: String) = viewModelScope.launch {
+        isLoading.postValue(true)
         try {
-            readmeDetails.postValue(null)
             val readme = reposService.getReadme(owner, repoName)
             readmeDetails.postValue(readme)
         } catch (e: Exception) {
             errorLiveData.postValue(e.message)
+        }
+        finally {
+            isLoading.postValue(false)
         }
     }
 }
