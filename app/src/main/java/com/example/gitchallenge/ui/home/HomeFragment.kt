@@ -10,7 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.example.gitchallenge.R
 import com.example.gitchallenge.databinding.FragmentHomeBinding
-import kotlinx.coroutines.flow.observeOn
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding

@@ -1,15 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.gitchallenge.ui.repodetails.RepoDetailsViewModel" />
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="15dp"
+        android:orientation="vertical"
+        android:padding="15dp"
         tools:context=".ui.repodetails.RepoDetailsFragment">
 
-    </FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_avatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="10dp"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/git" />
+
+            <TextView
+                android:id="@+id/tv_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@{viewModel.repoDetails.fullName}"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                tools:text="Full Name" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_regular"
+            android:text="@{viewModel.repoDetails.description}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            tools:text="Description" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="5dp"
+            android:background="#c0c0c0" />
+
+        <TextView
+            android:id="@+id/tv_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@{viewModel.repoDetails.username}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_user"
+            tools:text="Username" />
+
+        <TextView
+            android:id="@+id/tv_forks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@{viewModel.repoDetails.forks}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_fork"
+            tools:text="Forks" />
+
+        <TextView
+            android:id="@+id/tv_watchers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="@{viewModel.repoDetails.watchers}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_watchers"
+            tools:text="Watchers" />
+
+        <TextView
+            android:id="@+id/tv_link"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:gravity="center_vertical"
+            android:text="@{viewModel.repoDetails.link}"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:drawableStartCompat="@drawable/ic_link"
+            tools:text="Link" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginVertical="5dp"
+            android:background="#c0c0c0" />
+
+    </LinearLayout>
+
 </layout>

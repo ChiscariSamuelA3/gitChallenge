@@ -28,7 +28,7 @@ class ApiModule {
 
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl("https://api.github.com/search/")
+            .baseUrl(BuildConfig.API_HOST)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

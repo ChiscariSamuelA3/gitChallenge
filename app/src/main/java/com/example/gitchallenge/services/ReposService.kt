@@ -1,6 +1,5 @@
 package com.example.gitchallenge.services
 
-import android.content.Context
 import com.example.gitchallenge.api.ApiModule
 import com.example.gitchallenge.api.BaseApiCall
 import com.example.gitchallenge.api.error.ApiException
@@ -8,13 +7,13 @@ import com.example.gitchallenge.api.error.NetworkException
 import com.example.gitchallenge.api.utils.CallResult
 import com.example.gitchallenge.models.Repo
 
-class ReposService(context: Context) : BaseApiCall() {
+class ReposService : BaseApiCall() {
     companion object {
         private var instance: ReposService? = null
 
-        fun getInstance(context: Context): ReposService {
+        fun getInstance(): ReposService {
             if (instance == null) {
-                instance = ReposService(context)
+                instance = ReposService()
             }
 
             return instance!!
@@ -31,6 +30,21 @@ class ReposService(context: Context) : BaseApiCall() {
                 } else {
                     throw ApiException("API Error")
                 }
+            }
+            is CallResult.Failure -> {
+                if (response.networkError) {
+                    throw NetworkException("NETWORK Error")
+                } else {
+                    throw ApiException(response.errorBody.toString())
+                }
+            }
+        }
+    }
+
+    suspend fun getRepoDetails(ownerName: String, repoName: String): Repo {
+        when (val response = safeApiCall { api.getRepo(ownerName, repoName) }) {
+            is CallResult.Success -> {
+                return response.value
             }
             is CallResult.Failure -> {
                 if (response.networkError) {

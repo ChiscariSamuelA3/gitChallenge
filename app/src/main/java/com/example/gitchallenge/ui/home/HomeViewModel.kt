@@ -7,7 +7,7 @@ import com.example.gitchallenge.models.Repo
 import com.example.gitchallenge.services.ReposService
 
 class HomeViewModel(context: Context) : ViewModel() {
-    private val reposService: ReposService = ReposService.getInstance(context)
+    private val reposService: ReposService = ReposService.getInstance()
 
     private val errorLiveData: MutableLiveData<String?> = MutableLiveData(null)
     private val repos: LiveData<PagingData<HomeItemViewModel>> = Pager(PagingConfig(pageSize = 30)) {

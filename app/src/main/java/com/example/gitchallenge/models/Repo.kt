@@ -9,7 +9,8 @@ data class Repo(
     val fullName: String,
     val owner: Owner,
     val description: String,
-    val url: String,
+    @SerializedName("html_url")
+    val htmlUrl: String,
     @SerializedName("stargazers_count")
     val stargazersCount: Int,
     val forks: Int,
