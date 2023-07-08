@@ -66,11 +66,11 @@ class RepoDetailsFragment : Fragment() {
             if (readme != null) {
                 val decodedReadme = String(Base64.decode(readme.content, Base64.DEFAULT))
 
-                val markwon = Markwon.builder(requireContext())
+                val markdownContent = Markwon.builder(requireContext())
                     .usePlugin(ImagesPlugin.create())
                     .build()
 
-                markwon.setMarkdown(binding.tvReadmeContent, decodedReadme)
+                markdownContent.setMarkdown(binding.tvReadmeContent, decodedReadme)
             }
         }
 

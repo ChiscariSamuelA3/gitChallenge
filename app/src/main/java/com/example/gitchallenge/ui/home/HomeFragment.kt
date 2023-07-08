@@ -38,6 +38,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = HomeAdapter()
+
         binding.rvRepos.adapter = adapter
 
         viewModel.getRepos().observe(viewLifecycleOwner) { repos ->
@@ -47,10 +48,9 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.getIsLoading().observe(viewLifecycleOwner) { isLoading ->
-            if(isLoading) {
+            if (isLoading) {
                 binding.progressBar.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 binding.progressBar.visibility = View.GONE
             }
         }
@@ -58,6 +58,13 @@ class HomeFragment : Fragment() {
         viewModel.getErrorLiveData().observe(viewLifecycleOwner) { errorMessage ->
             if (errorMessage != null) {
                 Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_LONG).show()
+                binding.btnReply.visibility = View.VISIBLE
+
+                binding.btnReply.setOnClickListener {
+                    binding.btnReply.visibility = View.GONE
+
+                    adapter.retry()
+                }
             }
         }
     }

@@ -8,6 +8,9 @@ import com.example.gitchallenge.api.utils.CallResult
 import com.example.gitchallenge.models.Readme
 import com.example.gitchallenge.models.Repo
 
+private const val ERROR_API = "API Error"
+private const val ERROR_NETWORK = "NETWORK Error"
+
 class ReposService : BaseApiCall() {
     companion object {
         private var instance: ReposService? = null
@@ -29,12 +32,12 @@ class ReposService : BaseApiCall() {
                 if (response.value.items != null) {
                     return response.value.items
                 } else {
-                    throw ApiException("API Error")
+                    throw ApiException(ERROR_API)
                 }
             }
             is CallResult.Failure -> {
                 if (response.networkError) {
-                    throw NetworkException("NETWORK Error")
+                    throw NetworkException(ERROR_NETWORK)
                 } else {
                     throw ApiException(response.errorBody.toString())
                 }
@@ -49,7 +52,7 @@ class ReposService : BaseApiCall() {
             }
             is CallResult.Failure -> {
                 if (response.networkError) {
-                    throw NetworkException("NETWORK Error")
+                    throw NetworkException(ERROR_NETWORK)
                 } else {
                     throw ApiException(response.errorBody.toString())
                 }
@@ -64,7 +67,7 @@ class ReposService : BaseApiCall() {
             }
             is CallResult.Failure -> {
                 if (response.networkError) {
-                    throw NetworkException("NETWORK Error")
+                    throw NetworkException(ERROR_NETWORK)
                 } else {
                     throw ApiException(response.errorBody.toString())
                 }

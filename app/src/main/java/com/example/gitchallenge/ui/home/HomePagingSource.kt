@@ -1,22 +1,21 @@
 package com.example.gitchallenge.ui.home
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.gitchallenge.services.ReposService
 
-class ReposPagingSource(
+class HomePagingSource(
     private val reposService: ReposService,
-    private val isLoading: MutableLiveData<Boolean>
+    private val isLoading: MutableLiveData<Boolean>,
+    private val errorLiveData: MutableLiveData<String?>
 ) : PagingSource<Int, HomeItemViewModel>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, HomeItemViewModel> {
         val page = params.key ?: 1
 
-        Log.d("ReposPagingSource", "load: page = $page")
-
         return try {
             isLoading.postValue(true)
+            errorLiveData.postValue(null)
 
             val repos = reposService.getRepos(page).map { repo ->
                 HomeItemViewModel(repo)
@@ -28,6 +27,7 @@ class ReposPagingSource(
                 nextKey = if (repos.isEmpty()) null else page + 1
             )
         } catch (e: Exception) {
+            errorLiveData.postValue(e.message)
             LoadResult.Error(e)
         } finally {
             isLoading.postValue(false)

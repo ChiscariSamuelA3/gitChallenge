@@ -6,6 +6,8 @@ import androidx.paging.*
 import com.example.gitchallenge.models.Repo
 import com.example.gitchallenge.services.ReposService
 
+private const val PAGE_SIZE = 30
+
 class HomeViewModel(context: Context) : ViewModel() {
     private val reposService: ReposService = ReposService.getInstance()
 
@@ -13,8 +15,8 @@ class HomeViewModel(context: Context) : ViewModel() {
 
     private val errorLiveData: MutableLiveData<String?> = MutableLiveData(null)
     private val repos: LiveData<PagingData<HomeItemViewModel>> =
-        Pager(PagingConfig(pageSize = 30)) {
-            ReposPagingSource(reposService, isLoading)
+        Pager(PagingConfig(pageSize = PAGE_SIZE)) {
+            HomePagingSource(reposService, isLoading, errorLiveData)
         }.liveData.cachedIn(viewModelScope)
 
     fun getErrorLiveData() = errorLiveData
